@@ -78,14 +78,26 @@ export function downloadPdf(products, isDuplicate) {
     },
   });
 
-  const y = doc.lastAutoTable.finalY + 28;
-  doc.setTextColor(22, 33, 29);
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(11);
-  doc.text(`Total products: ${totals.count}`, 40, y);
-  doc.text(`Total quantity: ${totals.quantity}`, 200, y);
-  doc.text(`Total buying: ${number(totals.totalBuy)} ${CURRENCY}`, 340, y);
-  doc.text(`Total selling: ${number(totals.totalSell)} ${CURRENCY}`, 570, y);
+ let y = doc.lastAutoTable.finalY + 28;
 
-  doc.save(`stock-ledger-${today}.pdf`);
+ // Start a new page if the summary would run off the bottom
+ if (y > doc.internal.pageSize.getHeight() - 70) {
+   doc.addPage();
+   y = 50;
+ }
+
+ doc.setTextColor(22, 33, 29);
+ doc.setFont("helvetica", "bold");
+ doc.setFontSize(11);
+ doc.text(`Total products: ${totals.count}`, 40, y);
+ doc.text(`Total quantity: ${totals.quantity}`, 200, y);
+ doc.text(`Total buying: ${number(totals.totalBuy)} ${CURRENCY}`, 340, y);
+ doc.text(`Total selling: ${number(totals.totalSell)} ${CURRENCY}`, 570, y);
+
+ // Total profit on its own line, in the app's green
+ doc.setTextColor(15, 92, 74);
+ doc.setFontSize(13);
+ doc.text(`Total profit: ${number(totals.profit)} ${CURRENCY}`, 40, y + 26);
+
+ doc.save(`stock-ledger-${today}.pdf`);
 }
