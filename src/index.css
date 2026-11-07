@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-paper font-sans text-ink antialiased;
+  }
+  input:focus-visible,
+  button:focus-visible {
+    @apply outline-none ring-2 ring-leaf/40;
+  }
+}
+
+@layer components {
+  .num {
+    @apply font-mono;
+    font-variant-numeric: tabular-nums;
+  }
+}
